@@ -1,0 +1,21 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+# Go
+bin/
+ip-lookup-api
+go.sum
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Ansible
+*.retry
+
+# Docker
+*.log
