@@ -1,0 +1,37 @@
+---
+- name: Configure Bare-Metal Nginx Load Balancer
+  hosts: all
+  become: yes
+  vars:
+    backend_servers:
+      - 10.128.0.2:80
+      - 10.128.0.3:80
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Deploy Nginx configuration template
+      template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/sites-available/default
+      notify: Restart Nginx
+
+    - name: Ensure Nginx is enabled and running
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: Restart Nginx
+      systemd:
+        name: nginx
+        state: restarted
